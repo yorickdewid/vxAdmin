@@ -3,7 +3,7 @@
 #include <string.h>
 #include <getopt.h>
 
-#include "config.h"
+#include "common.h"
 
 void print_usage() {
 	printf("Usage: vxadmin [OPTION]\n\n");
@@ -48,5 +48,10 @@ int main(int argc, char *argv[]) {
 		return 1;
 
 	json_value_free(config);
+
+	if (opt_genkey) {
+		genkey();
+	}
+
 	return 0;
 }

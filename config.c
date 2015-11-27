@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include "config.h"
+#include "json.h"
 
 json_value *parse_config(char *filename) {
 	struct stat filestatus;
