@@ -10,21 +10,25 @@ void print_usage() {
 	printf("Usage: vxadmin [OPTION]\n\n");
 	printf(" -c, --config       Specify config\n");
 	printf("     --gen-key      Generate new secret key\n");
+	printf(" -v  --verify       Verify config\n");
+	printf(" -h, --help         This help\n");
 }
 
 int main(int argc, char *argv[]) {
-	int opt_genkey = 0, opt_config = 0;
+	int opt_genkey = 0, opt_config = 0, opt_verify = 0;
 	char configname[1024];
 	json_value *config = NULL;
 
 	static struct option long_options[] = {
 		{"config",    required_argument, 0,  'c' },
 		{"gen-key",   no_argument,       0,  'g' },
+		{"verify",    no_argument,       0,  'v' },
+		{"help",      no_argument,       0,  'h' },
 		{0,           0,                 0,  0   }
 	};
 
 	int opt, long_index = 0;
-	while ((opt = getopt_long(argc, argv,"c:g", long_options, &long_index)) != -1) {
+	while ((opt = getopt_long(argc, argv,"c:gh", long_options, &long_index)) != -1) {
 		switch (opt) {
 			case 'c' :
 				strncpy(configname, optarg, 1024);
@@ -33,6 +37,9 @@ int main(int argc, char *argv[]) {
 			case 'g' :
 				opt_genkey = 1;
 				break;
+			case 'v':
+				opt_verify = 1;
+				break;
 			default:
 				print_usage(); 
 				return 1;
@@ -40,7 +47,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (!opt_config) {
-		fprintf(stderr, "No config specified\n");
+		fprintf(stderr, "No config specified, for help see --help\n");
 		return 1;
 	}
 
@@ -68,8 +75,6 @@ int main(int argc, char *argv[]) {
 		char *buf = malloc(json_measure_ex(config, opts));
 		json_serialize_ex(buf, config, opts);
 
-		printf("%s\n", buf);
-
 		unlink(configname);
 		FILE *fp = fopen(configname, "ab");
 		if (fp) {
@@ -78,6 +83,10 @@ int main(int argc, char *argv[]) {
 		}
 
 		free(buf);
+	}
+
+	if (opt_verify) {
+		//
 	}
 
 	json_value_free(config);
