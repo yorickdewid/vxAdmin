@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 
 #include "json.h"
+#include "builder.h"
 
 json_value *parse_config(char *filename) {
 	struct stat filestatus;
@@ -35,7 +36,11 @@ json_value *parse_config(char *filename) {
 	}
 	fclose(fp);
 
-	json_value *config = json_parse((json_char *)file_contents, file_size);
+	json_settings settings = {};
+	settings.value_extra = json_builder_extra;
+
+	char error[128];
+	json_value *config = json_parse_ex(&settings, (json_char *)file_contents, file_size, error);
 	if (!config) {
 		fprintf(stderr, "Unable to parse config\n");
 		free(file_contents);
