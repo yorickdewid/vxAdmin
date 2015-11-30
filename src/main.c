@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	};
 
 	int opt, long_index = 0;
-	while ((opt = getopt_long(argc, argv,"c:gh", long_options, &long_index)) != -1) {
+	while ((opt = getopt_long(argc, argv,"c:gvh", long_options, &long_index)) != -1) {
 		switch (opt) {
 			case 'c' :
 				strncpy(configname, optarg, 1024);
@@ -62,7 +62,11 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (opt_verify) {
-		puts("Verify");
+		if (verify_config(config)) {
+			puts("Config OK");
+		} else {
+			puts("Config NOT OK");
+		}
 	}
 
 	json_value_free(config);
