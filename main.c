@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <getopt.h>
 
 #include "common.h"
@@ -59,30 +58,7 @@ int main(int argc, char *argv[]) {
 	if (opt_genkey) {
 		char *key = genkey();
 
-		for (int x = 0; x < config->u.object.length; x++) {
-			if (!strcmp(config->u.object.values[x].name, "secret")) {
-				free(config->u.object.values[x].value->u.string.ptr);
-				config->u.object.values[x].value->u.string.ptr = key;
-				config->u.object.values[x].value->u.string.length = 40;
-			}
-		}
-
-		json_serialize_opts opts;
-		opts.mode = json_serialize_mode_multiline;
-		opts.opts = json_serialize_opt_use_tabs;
-		opts.indent_size = 1;
-
-		char *buf = malloc(json_measure_ex(config, opts));
-		json_serialize_ex(buf, config, opts);
-
-		unlink(configname);
-		FILE *fp = fopen(configname, "ab");
-		if (fp) {
-			fputs(buf, fp);
-			fclose(fp);
-		}
-
-		free(buf);
+		set_key_config(configname, config, key);
 	}
 
 	if (opt_verify) {
