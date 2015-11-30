@@ -8,8 +8,8 @@
 void print_usage() {
 	printf("Usage: vxadmin [OPTION]\n\n");
 	printf(" -c, --config       Specify config\n");
-	printf("     --gen-key      Generate new secret key\n");
-	printf(" -v  --verify       Verify config\n");
+	printf(" -g, --gen-key      Generate new secret key\n");
+	printf(" -v, --verify       Verify config\n");
 	printf(" -h, --help         This help\n");
 }
 
@@ -59,6 +59,7 @@ int main(int argc, char *argv[]) {
 		char *key = genkey();
 
 		set_key_config(configname, config, key);
+		puts("Secret set");
 	}
 
 	if (opt_verify) {
