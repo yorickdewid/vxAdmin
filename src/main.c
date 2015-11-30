@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (opt_verify) {
-		//
+		puts("Verify");
 	}
 
 	json_value_free(config);

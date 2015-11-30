@@ -19,7 +19,7 @@ json_value *parse_config(char *filename) {
 	size_t file_size = filestatus.st_size;
 	char *file_contents = (char *)malloc(filestatus.st_size);
 	if (!file_contents) {
-		fprintf(stderr, "Memory error: unable to allocate %d bytes\n", file_size);
+		fprintf(stderr, "Memory error: unable to allocate %zu bytes\n", file_size);
 		return NULL;
 	}
 
@@ -30,7 +30,7 @@ json_value *parse_config(char *filename) {
 		free(file_contents);
 		return NULL;
 	}
-	if (fread(file_contents, file_size, 1, fp) < 0 ) {
+	if (fread(file_contents, file_size, 1, fp) == 0 ) {
 		fprintf(stderr, "Unable t read content of config %s\n", filename);
 		fclose(fp);
 		free(file_contents);
@@ -38,7 +38,8 @@ json_value *parse_config(char *filename) {
 	}
 	fclose(fp);
 
-	json_settings settings = {};
+	json_settings settings;
+	memset(&settings, 0, sizeof(json_settings));
 	settings.value_extra = json_builder_extra;
 
 	char error[128];
@@ -60,7 +61,7 @@ json_value *parse_config(char *filename) {
 }
 
 void set_key_config(char *configname, json_value *config, char *key) {
-		for (int x = 0; x < config->u.object.length; x++) {
+		for (unsigned int x = 0; x < config->u.object.length; x++) {
 			if (!strcmp(config->u.object.values[x].name, "secret")) {
 				free(config->u.object.values[x].value->u.string.ptr);
 				config->u.object.values[x].value->u.string.ptr = key;

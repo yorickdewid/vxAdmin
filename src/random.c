@@ -12,7 +12,7 @@ void *get_random_data(size_t len) {
 
 	char *rand_data = (char *)malloc(len);
 	if (!rand_data) {
-		fprintf(stderr, "Memory error: unable to allocate %d bytes\n", len);
+		fprintf(stderr, "Memory error: unable to allocate %zu bytes\n", len);
 		return NULL;
 	}
 

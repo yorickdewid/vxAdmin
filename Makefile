@@ -1,5 +1,21 @@
-all:
-	$(CC) json.c builder.c sha1.c random.c config.c genkey.c main.c -o bin/vxadmin -std=c11 -lm
+SRCDIR = src
+BINDIR = bin
+NAME = vxadmin
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+OBJECTS = $(SOURCES:.c=.o)
+CFLAGS = -g -O0 -pedantic-errors -std=c11 -Wall -Werror -Wextra -Winit-self -Wswitch-default -Wshadow
+LDFLAGS = -lm
+
+all: $(NAME)
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $(BINDIR)/$@
 
 clean:
-	$(RM) bin/vxadmin
+	$(RM) -rf $(SRCDIR)/*.o
+	$(RM) $(BINDIR)/$(NAME)
+
+cleandist: clean

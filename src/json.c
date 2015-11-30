@@ -46,12 +46,12 @@ typedef struct
 
 } json_state;
 
-static void * default_alloc (size_t size, int zero, void * user_data)
+static void * default_alloc (size_t size, int zero)
 {
    return zero ? calloc (1, size) : malloc (size);
 }
 
-static void default_free (void * ptr, void * user_data)
+static void default_free (void * ptr)
 {
    free (ptr);
 }
@@ -67,7 +67,7 @@ static void * json_alloc (json_state * state, unsigned long size, int zero)
       return 0;
    }
 
-   return state->settings.mem_alloc (size, zero, state->settings.user_data);
+   return state->settings.mem_alloc (size, zero);
 }
 
 static int new_value (json_state * state,
@@ -907,7 +907,7 @@ e_failed:
    while (alloc)
    {
       top = alloc->_reserved.next_alloc;
-      state.settings.mem_free (alloc, state.settings.user_data);
+      state.settings.mem_free (alloc);
       alloc = top;
    }
 
@@ -940,7 +940,7 @@ void json_value_free_ex (json_settings * settings, json_value * value)
 
             if (!value->u.array.length)
             {
-               settings->mem_free (value->u.array.values, settings->user_data);
+               settings->mem_free (value->u.array.values);
                break;
             }
 
@@ -951,7 +951,7 @@ void json_value_free_ex (json_settings * settings, json_value * value)
 
             if (!value->u.object.length)
             {
-               settings->mem_free (value->u.object.values, settings->user_data);
+               settings->mem_free (value->u.object.values);
                break;
             }
 
@@ -960,7 +960,7 @@ void json_value_free_ex (json_settings * settings, json_value * value)
 
          case json_string:
 
-            settings->mem_free (value->u.string.ptr, settings->user_data);
+            settings->mem_free (value->u.string.ptr);
             break;
 
          default:
@@ -969,7 +969,7 @@ void json_value_free_ex (json_settings * settings, json_value * value)
 
       cur_value = value;
       value = value->parent;
-      settings->mem_free (cur_value, settings->user_data);
+      settings->mem_free (cur_value);
    }
 }
 
