@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <getopt.h>
 
 #include "common.h"
@@ -17,6 +19,12 @@ int main(int argc, char *argv[]) {
 	int opt_genkey = 0, opt_config = 0, opt_verify = 0;
 	char configname[1024];
 	json_value *config = NULL;
+
+	uid_t uid = getuid(), euid = geteuid();
+	if (uid != 0 || uid != euid) {
+		fprintf(stderr, "User must have root privileges\n");
+		return 1;
+	}
 
 	static struct option long_options[] = {
 		{"config",    required_argument, 0,  'c' },
