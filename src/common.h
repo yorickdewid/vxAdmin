@@ -11,6 +11,6 @@ int verify_config(json_value *config);
 void *get_random_data(size_t len);
 char *genkey();
 char *genpasswd(size_t length);
-int reset_admin_password(json_value *config);
+int reset_admin_password(json_value *config, char *passwd);
 
 #endif // COMMON_H_INCLUDED

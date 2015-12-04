@@ -4,7 +4,8 @@ NAME = vxadmin
 SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(SOURCES:.c=.o)
 CFLAGS = -g -O0 -pedantic-errors -std=c11 -Wall -Werror -Wextra -Winit-self -Wswitch-default -Wshadow
-LDFLAGS = -lm
+LDLIBDIR = -L/usr/lib64/mysql
+LDFLAGS = -lm -lmysqlclient
 
 all: $(NAME)
 
@@ -12,7 +13,7 @@ all: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $(BINDIR)/$@
+	$(CC) $(OBJECTS) $(LDLIBDIR) $(LDFLAGS) -o $(BINDIR)/$@
 
 clean:
 	$(RM) -rf $(SRCDIR)/*.o
