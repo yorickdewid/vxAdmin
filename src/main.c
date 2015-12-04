@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 		{"verify",       no_argument,       0,  'v' },
 		{"admin-reset",  no_argument,       0,  'a' },
 		{"help",         no_argument,       0,  'h' },
-		{0,              0,                 0,  0   }
+		{0,              0,                 0,   0  }
 	};
 
 	int opt, long_index = 0;
@@ -64,8 +64,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (!opt_config) {
-		fprintf(stderr, "No config specified, for help see --help\n");
-		return 1;
+		strncpy(configname, "/etc/vxpanel.conf", 1024);
 	}
 
 	config = parse_config(configname);

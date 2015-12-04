@@ -12,7 +12,7 @@ json_value *parse_config(char *filename) {
 	FILE *fp = NULL;
 
 	if (stat(filename, &filestatus) != 0) {
-		fprintf(stderr, "File %s not found\n", filename);
+		fprintf(stderr, "Config file %s not found\n", filename);
 		return NULL;
 	}
 
