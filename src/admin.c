@@ -49,7 +49,11 @@ int reset_admin_password(json_value *config, char *passwd) {
 		return 0;
 	}
 
-	snprintf(query, QUERY_SZ, sql, passwd);
+	size_t psz = strlen(passwd);
+	char esc_passwd[2 * psz + 1];
+	mysql_real_escape_string(conn, esc_passwd, passwd, psz);
+
+	snprintf(query, QUERY_SZ, sql, esc_passwd);
 	if (mysql_query(conn, query)) {
 		fprintf(stderr, "%s\n", mysql_error(conn));
 		mysql_close(conn);
